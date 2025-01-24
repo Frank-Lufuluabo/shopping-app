@@ -8,7 +8,14 @@ import { PackageIcon, TrolleyIcon } from "@sanity/icons";
 function Header() {
     const { user } = useUser();
 
-    const createClerkPasskey = async () => { };
+    const createClerkPasskey = async () => {
+        try {
+            const response = await user?.createPasskey();
+            console.log(response);
+        } catch (err) {
+            console.error("Error", JSON.stringify(err, null, 2));
+        }
+     };
 
     return (
         <header className="flex flex-wrap justify-between items-center px-4 py-2 ">
@@ -74,7 +81,7 @@ function Header() {
                                 onClick={createClerkPasskey}
                                 className="bg-white hover:bg-blue-700 hover:text-white animate-pulse text-blue-500 font-bold py-2 px-4 rounded border-blue-300 border"
                             >
-                                Create a passkey now
+                                Create passkey
                             </button>
                         )}
                     </ClerkLoaded>
