@@ -40,7 +40,7 @@ export const orderType = defineType({
             name: "email",
             title: "Customer Email",
             type: "string",
-            validation: (Rule) => Rule.required(),
+            validation: (Rule) => Rule.required().email(),
         }),
         defineField({
             name: "stripePaymentIntentId",
@@ -91,7 +91,7 @@ export const orderType = defineType({
             name: "totalPrice",
             title: "Total Price",
             type: "number",
-            validation: (Rule) => Rule.required(),
+            validation: (Rule) => Rule.required().min(0),
         }),
         defineField({
             name: "currency",
@@ -103,7 +103,7 @@ export const orderType = defineType({
             name: "amountDiscount",
             title: "Amount Discount",
             type: "number",
-            validation: (Rule) => Rule.required(),
+            validation: (Rule) => Rule.min(0),
         }),
         defineField({
             name: "status",
@@ -116,15 +116,15 @@ export const orderType = defineType({
                     { title: "Shipped", value: "shipped" },
                     { title: "Delivered", value: "delivered" },
                     { title: "Cancelled", value: "cancelled" },
-                ]
-            }
+                ],
+            },
         }),
         defineField({
             name: "orderDate",
             title: "Order Date",
             type: "datetime",
             validation: (Rule) => Rule.required(),
-        })
+        }),
     ],
     preview: {
         select: {
@@ -140,7 +140,7 @@ export const orderType = defineType({
                 title: `${select.name} ${orderIdSnippet}`,
                 subtitle: `${select.amount} ${select.currency}, ${select.email}`,
                 media: BasketIcon,
-            }
-        }
-    }
+            };
+        },
+    },
 });

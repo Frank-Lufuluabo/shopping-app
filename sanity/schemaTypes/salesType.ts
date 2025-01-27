@@ -1,4 +1,4 @@
-import { TagIcon } from "@sanity/icons";
+import { TagIcon } from "@sanity/icons"; // Replace with any relevant icon for sales
 import { defineField, defineType, } from "sanity";
 
 export const salesType = defineType({
@@ -9,39 +9,39 @@ export const salesType = defineType({
     fields: [
         defineField({
             name: "title",
-            title: "string",
-            type: "Sale Title",
+            type: "string",
+            title: "Sale Title",
         }),
         defineField({
             name: "description",
-            title: "text",
-            type: "Sale Description",
+            type: "text",
+            title: "Sale Description",
         }),
         defineField({
             name: "discountAmount",
-            title: "number",
-            type: "Discount amount",
-            description: "amount off in percentage or fixed value",
+            type: "number",
+            title: "Discount amount",
+            description: "Amount off in percentage or fixed value",
         }),
         defineField({
             name: "couponCode",
-            title: "string",
-            type: "Coupon Code",
+            type: "string",
+            title: "Coupon Code",
         }),
         defineField({
             name: "validFrom",
-            title: "datetime",
-            type: "Valid From",
+            type: "datetime",
+            title: "Valid From",
         }),
         defineField({
             name: "validuntil",
-            title: "datetime",
-            type: "Valid Until",
+            type: "datetime",
+            title: "Valid Until",
         }),
         defineField({
             name: "isActive",
-            title: "boolean",
-            type: "Is Active",
+            type: "boolean",
+            title: "Is Active",
             description: "Toggle to avtive/deactivate the sale",
             initialValue: true,
         }),
