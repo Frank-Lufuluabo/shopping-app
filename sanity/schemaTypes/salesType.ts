@@ -42,7 +42,7 @@ export const salesType = defineType({
             name: "isActive",
             type: "boolean",
             title: "Is Active",
-            description: "Toggle to avtive/deactivate the sale",
+            description: "Toggle to active/deactivate the sale",
             initialValue: true,
         }),
     ],

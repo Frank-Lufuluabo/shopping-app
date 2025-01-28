@@ -1,9 +1,18 @@
-import Image from "next/image";
+import ProducsView from "@/components/ProducsView";
+import { getAllCategories } from "@/sanity/lib/products/getAllCategories";
+import { getAllProducts } from "@/sanity/lib/products/getAllProducts";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getAllProducts();
+  const categories = await getAllCategories();
+ 
   return (
     <div>
       <h1>Shopping App</h1>
+      {/* Render all the products */}
+      <div className="flex flex-col items-center justify-top min-h-screen bg-gray-100 p-4"> 
+        <ProducsView products={products} categories={categories} />
+      </div>
     </div>
   );
 }
