@@ -4,9 +4,14 @@ import { ClerkLoaded, SignedIn, SignInButton, UserButton, useUser } from "@clerk
 import Link from "next/link";
 import Form from "next/form";
 import { PackageIcon, TrolleyIcon } from "@sanity/icons";
+import useBasketStore from "@/store/store";
+
 
 function Header() {
     const { user } = useUser();
+    const itemCount = useBasketStore((state) => 
+        state.items.reduce((total, item) => total + item.quantity, 0)
+    );
 
     const createClerkPasskey = async () => {
         try {
