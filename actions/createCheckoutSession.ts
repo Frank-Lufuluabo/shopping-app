@@ -19,7 +19,7 @@ export type GroupedBasketItem = {
 export async function createCheckoutSession(
     items: GroupedBasketItem[],
     metadata: Metadata
-): Promise<string> {
+) {
     try {
         // Check if any grouped items don't have a price
         const itemsWithoutPrice = items.filter((item) => !item.product.price);
@@ -38,13 +38,8 @@ export async function createCheckoutSession(
             customerId = customers.data[0].id;
         }
 
-        const baseUrl = process.env.NODE_ENV === "production"
-            ? `https://${process.env.VERCEL_URL}`
-            : `${process.env.NEXT_PUBLIC_BASE_URL}`;
-
-        const successUrl = `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}`;
-
-        const cancelUrl = `${baseUrl}/basket`;
+        console.log("Success URL:", `${process.env.NEXT_PUBLIC_BASE_URL}/success`);
+        console.log("Cancel URL:", `${process.env.NEXT_PUBLIC_BASE_URL}/basket`);
 
         const session = await stripe.checkout.sessions.create({
             customer: customerId,
@@ -53,8 +48,8 @@ export async function createCheckoutSession(
             metadata,
             mode: "payment",
             allow_promotion_codes: true,
-            success_url: successUrl,
-            cancel_url: cancelUrl,
+            success_url: `${`https://${process.env.VERCEL_URL}` || process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}`,
+            cancel_url: `${`https://${process.env.VERCEL_URL}` || process.env.NEXT_PUBLIC_BASE_URL}/basket`,
             line_items: items.map((item) => ({
                 price_data: {
                     currency: "usd",
@@ -68,16 +63,11 @@ export async function createCheckoutSession(
                         images: item.product.image
                             ? [imageUrl(item.product.image).url()]
                             : undefined,
-                    },
+                    }
                 },
                 quantity: item.quantity,
             })),
         });
-
-        // Return the checkout URL
-        if (!session.url) {
-            throw new Error("Failed to create checkout session: No URL returned");
-        }
 
         return session.url;
     } catch (error) {
@@ -85,3 +75,47 @@ export async function createCheckoutSession(
         throw error; // Re-throw the error for handling in the calling code
     }
 }
+
+
+
+// const baseUrl = process.env.NODE_ENV === "production"
+//     ? `https://${process.env.VERCEL_URL}`
+//     : `${process.env.NEXT_PUBLIC_BASE_URL}`;
+
+// const successUrl = `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}`;
+
+// const cancelUrl = `${baseUrl}/basket`;
+
+// const session = await stripe.checkout.sessions.create({
+//     customer: customerId,
+//     customer_creation: customerId ? undefined : "always",
+//     customer_email: !customerId ? metadata.customerEmail : undefined,
+//     metadata,
+//     mode: "payment",
+//     allow_promotion_codes: true,
+//     success_url: successUrl,
+//     cancel_url: cancelUrl,
+//     line_items: items.map((item) => ({
+//         price_data: {
+//             currency: "usd",
+//             unit_amount: Math.round(item.product.price! * 100),
+//             product_data: {
+//                 name: item.product.name || "Unnamed Product",
+//                 description: `Product ID: ${item.product._id}`,
+//                 metadata: {
+//                     id: item.product._id,
+//                 },
+//                 images: item.product.image
+//                     ? [imageUrl(item.product.image).url()]
+//                     : undefined,
+//             },
+//         },
+//         quantity: item.quantity,
+//     })),
+// });
+// return session.url;
+// } catch (error) {
+//     console.error("Error creating checkout session:", error);
+//     throw error; // Re-throw the error for handling in the calling code
+// }
+// }
