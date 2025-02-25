@@ -5,6 +5,9 @@ import { notFound } from "next/navigation";
 import { PortableText } from "next-sanity";
 import AddToBasketButton from "@/components/AddToBasketButton";
 
+export const dynamic = "force-static";
+export const revalidate = 60; 
+
 
 async function ProductPage({
     params,
@@ -15,6 +18,11 @@ async function ProductPage({
 }) {
     const { slug } = await params;
     const product = await getProductBySlug(slug);
+
+    console.log(
+        crypto.randomUUID().slice(0.5) + 
+        `>>> Rerendered the product page cache for ${slug}`
+    );
 
     if (!product) {
         return notFound();
